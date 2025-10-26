@@ -2,9 +2,9 @@
 /* ------------------- VARIÁVEIS DE CORES E FONT SMOOTHING ------------------ */
 /* ---------------------------------------------------------------------- */
 
-/* Cores Padrão (Desligado: Fundo Branco, Destaque Vermelho) */
+/* Cores Padrão (ITEM 4 e NOVO BACKGROUND OCRE) */
 :root {
-    --bg-color-default: #ffffff; 
+    --bg-color-default: #CC7722; /* NOVO: COR OCRE (#CC7722) */ 
     --text-color-default: #000000;
     --highlight-bg-default: #e74c3c; 
     --highlight-text-default: #ffffff;
@@ -12,7 +12,7 @@
     --toggle-on-color: #e74c3c; 
 }
 
-/* CORES MODO ALTERNATIVO (Ligado: ITEM 4 - Dourado, Amarelo, Roxo) */
+/* CORES MODO ALTERNATIVO (Ligado: Dourado, Amarelo, Roxo) */
 .alt-theme {
     --bg-color-default: #FFD700; /* Background: Dourado */
     --text-color-default: #6A0DAD; /* Texto Principal: Roxo */
@@ -48,7 +48,7 @@ body {
 
 .content-container {
     max-width: calc(100% - 7cm); 
-    margin-left: 4cm;
+    margin-left: 4cm; /* MARGEM ESQUERDA DO CONTEÚDO */
     margin-right: 3cm;
     margin-top: 0;
     margin-bottom: 0;
@@ -79,7 +79,7 @@ body {
 .fixed-controls {
     position: fixed;
     bottom: 4cm;
-    left: 4cm;
+    left: 1cm; /* NOVO: POSICIONADO À ESQUERDA DA MARGEM DE 4CM */
     z-index: 1000;
     display: flex;
     flex-direction: column;
@@ -119,6 +119,9 @@ body {
     padding: 0 5px;
     box-sizing: border-box;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    
+    /* NOVO: MOLDURA DE 1 PONTO */
+    border: 1px solid var(--text-color-default);
 }
 
 .toggle-indicator {
@@ -130,6 +133,10 @@ body {
     text-align: center;
     width: 40px;
     user-select: none; 
+}
+
+.lang-slider .toggle-indicator {
+    color: #ffffff;
 }
 
 .toggle-indicator.off {
