@@ -7,8 +7,7 @@ const CONTENT_DATA = {
         'EN': "This manifesto consolidates the unquestionable advantages of electric and alternative mobility in cities, serving as an alert on the comparison with carburetion transports and providing a basis for social positioning and the inclusion of clean technologies."
     },
     'label-color': { 'PT': "Modo de Cores:", 'EN': "Color Mode:" },
-    'signature-title': { 'PT': "Manifesto Assinado Por:", 'EN': "Manifesto Signed By:" },
-    'signature-disclaimer': { 'PT': "O número de assinaturas é simulado para demonstrar o alcance social inicial do manifesto.", 'EN': "The number of signatures is simulated to demonstrate the initial social reach of the manifesto." },
+    'signature-title': { 'PT': "Assinado Por:", 'EN': "Signed By:" },
 
     // ------------------------------------------------
     // SEÇÕES DE CONTEÚDO (CONTEÚDO COMPLETO AQUI)
@@ -416,11 +415,16 @@ const CONTENT_CONTAINER = document.getElementById('content-container');
 const LAST_CONTENT_MARKER = document.getElementById('last-content-marker');
 
 // ELEMENTOS ADICIONAIS
+const SIGNATURE_COUNT_TITLE_ELEM = document.getElementById('signature-count-title');
 const SIGNATURE_COUNT_ELEM = document.getElementById('signature-count');
+const ABSTRACT_ELEM = document.getElementById('abstract-text');
 const SIGN_MANIFESTO_BTN = document.getElementById('sign-manifesto-btn');
 
-// VARIÁVEL GLOBAL PARA O CONTADOR (ITEM 8)
+// VARIÁVEIS DO CONTADOR VIVO (ITEM 5)
 let currentSignatures = 1202;
+// 3 min (180000ms), 2 min (120000ms), 4 min (240000ms)
+const signatureIntervals = [180000, 120000, 240000]; 
+let intervalIndex = 0;
 
 
 // FUNÇÕES DE ESTADO
@@ -444,47 +448,59 @@ function toggleColorMode() {
     }
 }
 
-// ITEM 8: FUNÇÃO DO CONTADOR DE ASSINATURAS VIVAS
+// ITEM 5: LÓGICA DO CONTADOR CÍCLICO
 function updateSignatureCount() {
     if (SIGNATURE_COUNT_ELEM) {
+        // Usa toLocaleString para formatar com separadores de milhar (Ex: 1.202)
         SIGNATURE_COUNT_ELEM.textContent = currentSignatures.toLocaleString('pt-BR');
     }
 }
 
-function simulateNewSignatures() {
-    // Adiciona uma assinatura a cada 5 segundos para simular atividade
-    const randomIncrease = Math.floor(Math.random() * 5) + 1; // 1 a 5 por vez
+function runSignatureCycle() {
+    // Aumenta o número de 1 a 5 para simular adesão
+    const randomIncrease = Math.floor(Math.random() * 5) + 1; 
     currentSignatures += randomIncrease;
     updateSignatureCount();
+    
+    // Pega o intervalo atual e avança para o próximo índice (cíclico)
+    const interval = signatureIntervals[intervalIndex];
+    intervalIndex = (intervalIndex + 1) % signatureIntervals.length;
+    
+    // Configura o próximo ciclo
+    setTimeout(runSignatureCycle, interval);
 }
 
 function handleSignManifesto() {
     // Simula a assinatura do usuário atual
     currentSignatures += 1;
     updateSignatureCount();
-    alert("Obrigado por assinar o Manifesto! Sua assinatura foi registrada."); // Feedback
+    
+    // AÇÃO SEQUENCIAL SUGERIDA: Foco em Engajamento
+    alert("Manifesto assinado! Sua voz foi adicionada à nossa crescente comunidade."); // Feedback imediato
+
+    // Sugestão 1: Levar o usuário para o topo para continuar a leitura/interação
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// FUNÇÃO DE TRADUÇÃO E PREENCHIMENTO DE CONTEÚDO
+
+// FUNÇÃO DE TRADUÇÃO E PREENCHIMENTO DE CONTEÚDO (CORREÇÃO DO BUG TELA BRANCA)
 function updateContent() {
     const currentLang = getLang();
-    // O botão mostra o idioma PARA O QUAL ele VAI TRADUZIR
     const targetLang = (currentLang === 'PT' ? 'EN' : 'PT'); 
     
     // 1. Atualiza elementos estáticos
     document.getElementById('doc-title').textContent = CONTENT_DATA['title'][currentLang];
     document.getElementById('main-title').textContent = CONTENT_DATA['title'][currentLang];
-    document.getElementById('abstract-text').textContent = CONTENT_DATA['abstract'][currentLang];
+    ABSTRACT_ELEM.textContent = CONTENT_DATA['abstract'][currentLang];
     document.querySelector('.toggle-label[for="color-toggle"]').textContent = CONTENT_DATA['label-color'][currentLang];
-    document.getElementById('signature-count-title').textContent = CONTENT_DATA['signature-title'][currentLang];
-    document.getElementById('signature-disclaimer').textContent = CONTENT_DATA['signature-disclaimer'][currentLang];
-    document.getElementById('sign-manifesto-btn').textContent = (currentLang === 'PT' ? 'Assinar Manifesto' : 'Sign Manifesto');
+    SIGNATURE_COUNT_TITLE_ELEM.textContent = CONTENT_DATA['signature-title'][currentLang];
+    SIGN_MANIFESTO_BTN.textContent = (currentLang === 'PT' ? 'Assinar Manifesto' : 'Sign Manifesto');
     
     // 2. Atualiza o texto do botão de tradução
     LANG_SWITCH_BTN.textContent = `(${targetLang})`;
     
     // 3. CONSTRUÇÃO DO CORPO DO MANIFESTO
-    let htmlContent = ``;
+    let htmlContent = '';
     
     // Loop principal (Seções 1 a 10)
     for (let i = 1; i <= 10; i++) {
@@ -493,13 +509,13 @@ function updateContent() {
             htmlContent += `<div class="topic-section">`;
             htmlContent += `<h2 class="main-topic">${CONTENT_DATA[majorKey][currentLang]}</h2>`;
             
-            // Loop de Subseções (Ex: 1.1, 1.2)
+            // Loop de Subseções
             let j = 1;
             while (CONTENT_DATA[`${i}.${j}`]) {
                 const subKey = `${i}.${j}`;
                 htmlContent += `<h3 class="sub-topic">${CONTENT_DATA[subKey][currentLang]}</h3>`;
                 
-                // Loop de Detalhes (Ex: 1.1.1, 1.1.2)
+                // Loop de Detalhes
                 let k = 1;
                 while (CONTENT_DATA[`${subKey}.${k}`]) {
                     const detailKey = `${subKey}.${k}`;
@@ -513,8 +529,30 @@ function updateContent() {
         }
     }
     
-    // Insere o conteúdo no container
-    CONTENT_CONTAINER.innerHTML += htmlContent; 
+    // CORREÇÃO DO BUG: Substitui o conteúdo no content-container, mantendo os elementos iniciais (h1 e abstract)
+    // O h1 e o abstract já foram atualizados no DOM no passo 1.
+    // O innerHTML é usado para substituir apenas a parte dinâmica do conteúdo.
+    // É crucial que o index.html tenha o container de conteúdo principal vazio (sem as seções 1-10)
+    
+    // Encontra o último elemento estático (abstract-text) para saber onde o manifesto deve começar
+    const contentToReplace = document.getElementById('main-title').nextElementSibling.nextElementSibling; // Pula Abstract e Signature
+    
+    // Cria um novo container temporário para o manifesto (topic-section)
+    const manifestoHTML = document.createElement('div');
+    manifestoHTML.innerHTML = htmlContent;
+
+    // Remove o conteúdo antigo dinâmico (topic-section) se existir
+    const existingManifesto = CONTENT_CONTAINER.querySelector('.topic-section');
+    if (existingManifesto) {
+        existingManifesto.remove();
+    }
+    
+    // Insere o novo manifesto após o abstract
+    ABSTRACT_ELEM.insertAdjacentElement('afterend', manifestoHTML);
+    
+    // Reposiciona o marcador de final de página
+    CONTENT_CONTAINER.appendChild(LAST_CONTENT_MARKER);
+    
 }
 
 function toggleLanguage() {
@@ -522,31 +560,29 @@ function toggleLanguage() {
     const newLang = (currentLang === 'PT' ? 'EN' : 'PT');
     
     saveState('lang-mode', newLang);
-    // Remove o conteúdo antigo para que o novo seja renderizado
-    CONTENT_CONTAINER.innerHTML = ''; 
+    
+    // Reconstroi o conteúdo
     updateContent(); 
 }
 
-// ITEM 3: FUNÇÃO PARA MOSTRAR O BOTÃO DE TRADUÇÃO APENAS NO FINAL
+// FUNÇÃO PARA MOSTRAR O BOTÃO DE TRADUÇÃO APENAS NO FINAL
 function checkScroll() {
-    // Usamos o 'last-content-marker' para saber quando estamos perto do final
-    const markerPosition = LAST_CONTENT_MARKER.getBoundingClientRect().top;
+    const lastContent = LAST_CONTENT_MARKER.getBoundingClientRect();
     const viewportHeight = window.innerHeight;
 
-    // Se o marcador do final estiver visível (acima de 95% do topo da viewport)
-    if (markerPosition <= viewportHeight) { 
+    // Se o marcador do final estiver visível (ou acima de 95% do topo da viewport)
+    if (lastContent.top <= viewportHeight * 0.95) { 
         LANG_SWITCH_BTN.classList.add('visible');
     } else {
         LANG_SWITCH_BTN.classList.remove('visible');
     }
 }
 
-// ITEM 6: FUNÇÃO PARA ROLAR ATÉ O FINAL DO CONTEÚDO
+// FUNÇÃO PARA ROLAR ATÉ O FINAL DO CONTEÚDO (ÂNCORA)
 window.scrollToSources = function() {
-    // Rola para a seção de fontes/assinaturas
-    const signatureSection = document.getElementById('signature-section');
-    if (signatureSection) {
-        signatureSection.scrollIntoView({ behavior: 'smooth' });
+    const sourcesElement = document.getElementById('last-content-marker'); // Usaremos o marcador de fim como âncora
+    if (sourcesElement) {
+        sourcesElement.scrollIntoView({ behavior: 'smooth' });
     }
 }
 
@@ -560,7 +596,7 @@ document.addEventListener('DOMContentLoaded', () => {
         BODY_ELEMENT.classList.add('alt-theme');
     }
     
-    // 2. ADICIONA EVENTO DE ASSINATURA (ITEM 8)
+    // 2. ADICIONA EVENTO DE ASSINATURA 
     if (SIGN_MANIFESTO_BTN) {
         SIGN_MANIFESTO_BTN.addEventListener('click', handleSignManifesto);
     }
@@ -569,10 +605,10 @@ document.addEventListener('DOMContentLoaded', () => {
     updateContent();
     updateSignatureCount(); // Define o número inicial
     
-    // 4. INICIA O CONTADOR VIVO (ITEM 8)
-    setInterval(simulateNewSignatures, 5000); // Adiciona assinaturas a cada 5 segundos
+    // 4. INICIA O CONTADOR CÍCLICO VIVO (ITEM 5)
+    runSignatureCycle(); // Inicia o ciclo 3-2-4 min
     
     // 5. ADICIONA LISTENER DE SCROLL para o botão de tradução
     window.addEventListener('scroll', checkScroll);
-    checkScroll(); // Verifica na carga inicial
+    checkScroll(); 
 });
