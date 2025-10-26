@@ -13,6 +13,7 @@
 <body id="site-body">
     
     <div class="fixed-controls">
+        
         <div class="toggle-control">
             <label class="toggle-label" for="color-toggle">Modo de Cores:</label>
             <input type="checkbox" id="color-toggle" class="toggle-input" onchange="toggleColorMode()">
@@ -22,24 +23,23 @@
             </label>
         </div>
     </div>
+    
+    <div id="signature-block" class="signature-block">
+        <h3 id="signature-count-title">Manifesto Assinado Por:</h3>
+        <span id="signature-count" class="signature-count">1202</span>
+        <button id="sign-manifesto-btn" class="sign-manifesto-btn">Assinar Manifesto</button>
+    </div>
 
     <div class="content-container" id="content-container">
         <h1 id="main-title">Carregando Conteúdo...</h1>
         <p id="abstract-text" class="abstract-text">Carregando Abstract...</p>
-        
-        <div id="signature-section" class="signature-section">
-            <h3 id="signature-count-title">Manifesto Assinado Por:</h3>
-            <span id="signature-count" class="signature-count">1202</span>
-            <button id="sign-manifesto-btn" class="sign-manifesto-btn">Assinar Manifesto</button>
-            <p id="signature-disclaimer" class="signature-disclaimer"></p>
-        </div>
         
         <div id="last-content-marker" style="height: 1px;"></div> 
     </div>
     
     <span id="sources-btn" class="sources-btn" onclick="scrollToSources()">Fontes</span>
 
-    <span id="lang-switch-btn" class="lang-switch-btn" onclick="toggleLanguage()"></span>
+    <span id="lang-switch-btn" class="lang-switch-btn"></span>
     
     <script src="script.js"></script>
 </body>
