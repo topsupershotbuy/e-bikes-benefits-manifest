@@ -21,21 +21,13 @@
                 <span class="toggle-indicator on">Ligado</span>
             </label>
         </div>
-
-        <div class="toggle-control">
-            <label class="toggle-label" for="lang-toggle">Tradução:</label>
-            <input type="checkbox" id="lang-toggle" class="toggle-input" onchange="toggleLanguage()">
-            <label for="lang-toggle" class="toggle-slider lang-slider">
-                <span class="toggle-indicator off">PT</span>
-                <span class="toggle-indicator on">EN</span>
-            </label>
-        </div>
     </div>
-
 
     <div class="content-container" id="content-container">
         <h1 id="main-title">Carregando Conteúdo...</h1>
     </div>
+    
+    <span id="lang-switch-btn" class="lang-switch-btn" onclick="toggleLanguage()"></span>
     
     <script src="script.js"></script>
 </body>
