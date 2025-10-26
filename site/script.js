@@ -1,14 +1,19 @@
 // O CONTEÚDO COMPLETO DO MANIFESTO (CORRIGIDO PARA ESTRUTURA PT/EN)
 const CONTENT_DATA = {
     // TÍTULOS ESTÁTICOS E LABELS
-    'title': { 'PT': "BENEFÍCIOS DO CICLISMO URBANO", 'EN': "URBAN CYCLING BENEFITS" },
+    'title': { 'PT': "MANIFESTO DE BENEFÍCIOS DO CICLISMO URBANO", 'EN': "URBAN CYCLING BENEFITS MANIFESTO" },
+    'abstract': { 
+        'PT': "Este manifesto consolida as vantagens inquestionáveis da mobilidade elétrica e alternativa nas cidades, servindo como alerta sobre o comparativo com transportes de carburação e fornecendo base para o posicionamento social e a inclusão de tecnologias limpas.", 
+        'EN': "This manifesto consolidates the unquestionable advantages of electric and alternative mobility in cities, serving as an alert on the comparison with carburetion transports and providing a basis for social positioning and the inclusion of clean technologies."
+    },
     'label-color': { 'PT': "Modo de Cores:", 'EN': "Color Mode:" },
-    // ... (Os labels de tradução não são mais necessários aqui, pois o botão é dinâmico)
+    'signature-title': { 'PT': "Manifesto Assinado Por:", 'EN': "Manifesto Signed By:" },
+    'signature-disclaimer': { 'PT': "O número de assinaturas é simulado para demonstrar o alcance social inicial do manifesto.", 'EN': "The number of signatures is simulated to demonstrate the initial social reach of the manifesto." },
 
     // ------------------------------------------------
     // SEÇÕES DE CONTEÚDO (CONTEÚDO COMPLETO AQUI)
     // ------------------------------------------------
-
+    
     // SEÇÃO 1: BENEFÍCIOS FÍSICOS E FISIOLÓGICOS
     '1.0': { 'PT': '1. BENEFÍCIOS FÍSICOS E FISIOLÓGICOS', 'EN': '1. PHYSICAL AND PHYSIOLOGICAL BENEFITS' },
     '1.1': { 'PT': '1.1 Condicionamento Cardiovascular Avançado', 'EN': '1.1 Advanced Cardiovascular Conditioning' },
@@ -410,12 +415,18 @@ const LANG_SWITCH_BTN = document.getElementById('lang-switch-btn');
 const CONTENT_CONTAINER = document.getElementById('content-container');
 const LAST_CONTENT_MARKER = document.getElementById('last-content-marker');
 
+// ELEMENTOS ADICIONAIS
+const SIGNATURE_COUNT_ELEM = document.getElementById('signature-count');
+const SIGN_MANIFESTO_BTN = document.getElementById('sign-manifesto-btn');
+
+// VARIÁVEL GLOBAL PARA O CONTADOR (ITEM 8)
+let currentSignatures = 1202;
+
 
 // FUNÇÕES DE ESTADO
 function saveState(key, value) { localStorage.setItem(key, value); }
 function loadState(key) { return localStorage.getItem(key); }
 function getLang() { 
-    // Garante que o idioma padrão seja PT se não houver estado salvo
     return loadState('lang-mode') || 'PT'; 
 }
 
@@ -433,28 +444,53 @@ function toggleColorMode() {
     }
 }
 
+// ITEM 8: FUNÇÃO DO CONTADOR DE ASSINATURAS VIVAS
+function updateSignatureCount() {
+    if (SIGNATURE_COUNT_ELEM) {
+        SIGNATURE_COUNT_ELEM.textContent = currentSignatures.toLocaleString('pt-BR');
+    }
+}
+
+function simulateNewSignatures() {
+    // Adiciona uma assinatura a cada 5 segundos para simular atividade
+    const randomIncrease = Math.floor(Math.random() * 5) + 1; // 1 a 5 por vez
+    currentSignatures += randomIncrease;
+    updateSignatureCount();
+}
+
+function handleSignManifesto() {
+    // Simula a assinatura do usuário atual
+    currentSignatures += 1;
+    updateSignatureCount();
+    alert("Obrigado por assinar o Manifesto! Sua assinatura foi registrada."); // Feedback
+}
+
 // FUNÇÃO DE TRADUÇÃO E PREENCHIMENTO DE CONTEÚDO
 function updateContent() {
     const currentLang = getLang();
     // O botão mostra o idioma PARA O QUAL ele VAI TRADUZIR
     const targetLang = (currentLang === 'PT' ? 'EN' : 'PT'); 
     
-    // 1. Preenche o Título principal
+    // 1. Atualiza elementos estáticos
+    document.getElementById('doc-title').textContent = CONTENT_DATA['title'][currentLang];
     document.getElementById('main-title').textContent = CONTENT_DATA['title'][currentLang];
-    
-    // 2. Preenche o label do toggle de cores
+    document.getElementById('abstract-text').textContent = CONTENT_DATA['abstract'][currentLang];
     document.querySelector('.toggle-label[for="color-toggle"]').textContent = CONTENT_DATA['label-color'][currentLang];
+    document.getElementById('signature-count-title').textContent = CONTENT_DATA['signature-title'][currentLang];
+    document.getElementById('signature-disclaimer').textContent = CONTENT_DATA['signature-disclaimer'][currentLang];
+    document.getElementById('sign-manifesto-btn').textContent = (currentLang === 'PT' ? 'Assinar Manifesto' : 'Sign Manifesto');
     
-    // 3. Atualiza o texto do botão de tradução
+    // 2. Atualiza o texto do botão de tradução
     LANG_SWITCH_BTN.textContent = `(${targetLang})`;
     
-    // 4. CONSTRUÇÃO DO CORPO DO MANIFESTO (ESTRUTURA COMPLETA)
-    let htmlContent = `<div class="topic-section">`;
+    // 3. CONSTRUÇÃO DO CORPO DO MANIFESTO
+    let htmlContent = ``;
     
     // Loop principal (Seções 1 a 10)
     for (let i = 1; i <= 10; i++) {
         const majorKey = `${i}.0`;
         if (CONTENT_DATA[majorKey]) {
+            htmlContent += `<div class="topic-section">`;
             htmlContent += `<h2 class="main-topic">${CONTENT_DATA[majorKey][currentLang]}</h2>`;
             
             // Loop de Subseções (Ex: 1.1, 1.2)
@@ -467,40 +503,50 @@ function updateContent() {
                 let k = 1;
                 while (CONTENT_DATA[`${subKey}.${k}`]) {
                     const detailKey = `${subKey}.${k}`;
-                    // Acessa o texto de detalhe
                     const detailText = CONTENT_DATA[detailKey][currentLang] || '';
                     htmlContent += `<p class="detail">${detailText}</p>`;
                     k++;
                 }
                 j++;
             }
+            htmlContent += `</div>`;
         }
     }
     
-    htmlContent += `</div>`;
-    
-    CONTENT_CONTAINER.innerHTML = htmlContent;
+    // Insere o conteúdo no container
+    CONTENT_CONTAINER.innerHTML += htmlContent; 
 }
 
 function toggleLanguage() {
     const currentLang = getLang();
-    // O novo idioma é o oposto do atual
     const newLang = (currentLang === 'PT' ? 'EN' : 'PT');
     
     saveState('lang-mode', newLang);
-    updateContent(); // Recarrega o conteúdo no novo idioma
+    // Remove o conteúdo antigo para que o novo seja renderizado
+    CONTENT_CONTAINER.innerHTML = ''; 
+    updateContent(); 
 }
 
 // ITEM 3: FUNÇÃO PARA MOSTRAR O BOTÃO DE TRADUÇÃO APENAS NO FINAL
 function checkScroll() {
+    // Usamos o 'last-content-marker' para saber quando estamos perto do final
     const markerPosition = LAST_CONTENT_MARKER.getBoundingClientRect().top;
     const viewportHeight = window.innerHeight;
 
-    // Se a marcação do final do conteúdo estiver visível ou acima da metade da tela
-    if (markerPosition <= viewportHeight * 0.95) { 
+    // Se o marcador do final estiver visível (acima de 95% do topo da viewport)
+    if (markerPosition <= viewportHeight) { 
         LANG_SWITCH_BTN.classList.add('visible');
     } else {
         LANG_SWITCH_BTN.classList.remove('visible');
+    }
+}
+
+// ITEM 6: FUNÇÃO PARA ROLAR ATÉ O FINAL DO CONTEÚDO
+window.scrollToSources = function() {
+    // Rola para a seção de fontes/assinaturas
+    const signatureSection = document.getElementById('signature-section');
+    if (signatureSection) {
+        signatureSection.scrollIntoView({ behavior: 'smooth' });
     }
 }
 
@@ -514,10 +560,19 @@ document.addEventListener('DOMContentLoaded', () => {
         BODY_ELEMENT.classList.add('alt-theme');
     }
     
-    // 2. ATUALIZA O CONTEÚDO INICIAL (Isso também define o idioma e o botão de tradução)
-    updateContent();
+    // 2. ADICIONA EVENTO DE ASSINATURA (ITEM 8)
+    if (SIGN_MANIFESTO_BTN) {
+        SIGN_MANIFESTO_BTN.addEventListener('click', handleSignManifesto);
+    }
     
-    // 3. ADICIONA LISTENER DE SCROLL para o botão de tradução (Item 3)
+    // 3. ATUALIZA O CONTEÚDO INICIAL
+    updateContent();
+    updateSignatureCount(); // Define o número inicial
+    
+    // 4. INICIA O CONTADOR VIVO (ITEM 8)
+    setInterval(simulateNewSignatures, 5000); // Adiciona assinaturas a cada 5 segundos
+    
+    // 5. ADICIONA LISTENER DE SCROLL para o botão de tradução
     window.addEventListener('scroll', checkScroll);
     checkScroll(); // Verifica na carga inicial
 });
