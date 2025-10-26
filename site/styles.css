@@ -1,40 +1,52 @@
-/* Definição das Cores Padrão (Sem o botão ligado - Referência: Canva vermelho e branco) */
+/* ---------------------------------------------------------------------- */
+/* ------------------- VARIÁVEIS DE CORES E FONT SMOOTHING ------------------ */
+/* ---------------------------------------------------------------------- */
+
+/* Cores Padrão (Desligado: Fundo Branco, Destaque Vermelho) */
 :root {
     --bg-color-default: #ffffff; 
-    --text-color-default: #000000; /* Texto principal em preto (cor do corpo) */
+    --text-color-default: #000000;
     --highlight-bg-default: #e74c3c; /* Vermelho vivo do destaque */
-    --highlight-text-default: #ffffff; /* Cor do texto DENTRO do destaque */
-
-    /* Cores do Modo Alternativo (Com o botão ligado - Ecopunk) */
-    --bg-color-alt: #fcfd5a; /* Fundo: #fcfd5a */
-    --text-color-alt: #d57bff; /* Texto principal: #d57bff */
-    --highlight-bg-alt: #c9610b; /* Fundo de Destaque: #c9610b */
-    --highlight-text-alt: #d57bff; /* Texto Destaque: #d57bff */
+    --highlight-text-default: #ffffff;
+    --toggle-off-color: #95a5a6; /* Cor do toggle desligado */
+    --toggle-on-color-color: #e74c3c; /* Cor do toggle Ligado (Vermelho) */
 }
 
-/* Base Body e Margens */
+/* CORES MODO ALTERNATIVO (Ligado: ITEM 4) */
+.alt-theme {
+    --bg-color-default: #FFD700; /* Background: Dourado */
+    --text-color-default: #6A0DAD; /* Texto Principal: Roxo */
+    --highlight-bg-default: #FFC300; /* Destaque BG: Amarela */
+    --highlight-text-default: #6A0DAD; /* Destaque Texto: Roxa */
+    --toggle-off-color: #c9610b; /* Toggle OFF */
+    --toggle-on-color: #6A0DAD; /* Toggle ON */
+}
+
+/* ---------------------------------------------------------------------- */
+/* ------------------------------- BASE E ESTILO ------------------------------ */
+/* ---------------------------------------------------------------------- */
+
 body {
-    /* FONTE */
     font-family: 'League Gothic', Arial, sans-serif;
-    
     background-color: var(--bg-color-default);
     color: var(--text-color-default);
     transition: background-color 0.3s, color 0.3s;
     margin: 0;
-    
-    /* MARGENS: top: 2cm; inferior: 4cm */
     padding-top: 2cm;
     padding-bottom: 4cm;
+    
+    /* ITEM 5: CORREÇÃO DO FOCO/RESOLUÇÃO DA FONTE */
+    -webkit-font-smoothing: antialiased; 
+    -moz-osx-font-smoothing: grayscale; 
+    text-rendering: optimizeLegibility; 
 }
 
-/* Alternância de Tema */
 .alt-theme {
-    background-color: var(--bg-color-alt);
-    color: var(--text-color-alt);
+    background-color: var(--bg-color-default);
+    color: var(--text-color-default);
 }
 
 .content-container {
-    /* MARGENS LATERAIS: direita: 3cm; esquerda: 4cm */
     max-width: calc(100% - 7cm); 
     margin-left: 4cm;
     margin-right: 3cm;
@@ -44,64 +56,130 @@ body {
 
 /* Estilo de Destaque */
 .main-topic, .sub-topic, .detail {
-    /* Estilo do bloco, como na referência */
     display: block; 
     padding: 8px 12px;
     margin-bottom: 12px;
     border-radius: 4px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s, color 0.3s;
-    text-align: justify; /* REQUISITO: Justificado */
-}
-
-/* Títulos Principais (Cor Padrão) */
-.main-topic {
+    text-align: justify;
+    
     background-color: var(--highlight-bg-default);
     color: var(--highlight-text-default);
-    font-size: 18pt; /* REQUISITO: 18pt */
 }
 
-/* Subtítulos (Cor Padrão) */
-.sub-topic {
-    background-color: var(--highlight-bg-default);
-    color: var(--highlight-text-default);
-    font-size: 16.5pt; /* REQUISITO: 16.5pt */
-}
+.main-topic { font-size: 18pt; }
+.sub-topic { font-size: 16.5pt; }
+.detail { font-size: 15pt; }
 
-/* Linhas de Detalhe (Cor Padrão) */
-.detail {
-    background-color: var(--highlight-bg-default);
-    color: var(--highlight-text-default);
-    font-size: 15pt; /* REQUISITO: 15pt */
-}
+/* ---------------------------------------------------------------------- */
+/* ------------------------------- ESTILO DO TOGGLE (ITEM 2 & 3) ----------------- */
+/* ---------------------------------------------------------------------- */
 
-/* CORES DO MODO ALTERNATIVO */
-.alt-theme .main-topic,
-.alt-theme .sub-topic,
-.alt-theme .detail {
-    background-color: var(--highlight-bg-alt);
-    color: var(--highlight-text-alt);
-}
-
-
-/* Estilo do Botão */
-.color-toggle-btn {
-    position: fixed; 
-    bottom: 4cm; /* Posicionamento: 4cm da margem inferior */
-    left: 4cm; /* Posicionamento: 4cm da margem esquerda */
-    padding: 10px 15px;
-    background-color: var(--highlight-bg-default); 
-    color: var(--highlight-text-default);
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
+.fixed-controls {
+    position: fixed;
+    bottom: 4cm;
+    left: 4cm;
     z-index: 1000;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.3s, color 0.3s;
+    display: flex;
+    flex-direction: column;
+    gap: 15px; 
 }
 
-.alt-theme .color-toggle-btn {
-    background-color: var(--highlight-bg-alt);
-    color: var(--highlight-text-alt);
+.toggle-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.toggle-label {
+    font-size: 14pt;
+    font-weight: bold;
+    color: var(--text-color-default);
+    transition: color 0.3s;
+    width: 100px; 
+    text-align: left;
+}
+
+.toggle-input {
+    display: none; 
+}
+
+.toggle-slider {
+    cursor: pointer;
+    width: 100px; 
+    height: 30px; 
+    background-color: var(--toggle-off-color);
+    border-radius: 15px;
+    position: relative;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 5px;
+    box-sizing: border-box;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.toggle-indicator {
+    position: absolute;
+    color: white; /* Cor do texto dentro do switch */
+    font-size: 12pt;
+    font-weight: bold;
+    line-height: 30px;
+    text-align: center;
+    width: 40px;
+    user-select: none; /* Impede seleção do texto */
+}
+
+.lang-slider .toggle-indicator {
+    color: #ffffff;
+}
+
+.toggle-indicator.off {
+    left: 5px;
+    opacity: 1;
+}
+
+.toggle-indicator.on {
+    right: 5px;
+    opacity: 0;
+}
+
+.toggle-slider::before {
+    content: '';
+    position: absolute;
+    width: 25px; 
+    height: 25px;
+    background-color: white;
+    border-radius: 50%;
+    left: 2px;
+    transition: transform 0.3s;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* ESTADO LIGADO (CHECKED) */
+.toggle-input:checked + .toggle-slider {
+    background-color: var(--toggle-on-color);
+}
+
+.toggle-input:checked + .toggle-slider::before {
+    transform: translateX(70px); 
+}
+
+.toggle-input:checked + .toggle-slider .toggle-indicator.off {
+    opacity: 0;
+}
+
+.toggle-input:checked + .toggle-slider .toggle-indicator.on {
+    opacity: 1;
+}
+
+/* Cores específicas para o slider de Idioma (PT/EN) */
+.lang-slider {
+    background-color: #007bff; /* Azul padrão para PT (Item 3) */
+}
+
+.toggle-input:checked + .lang-slider {
+    background-color: #28a745; /* Verde para EN (Item 3) */
 }
