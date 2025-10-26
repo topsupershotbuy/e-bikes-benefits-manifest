@@ -2,24 +2,26 @@
 /* ------------------- VARIÁVEIS DE CORES E FONT SMOOTHING ------------------ */
 /* ---------------------------------------------------------------------- */
 
-/* Cores Padrão (ITEM 4 e NOVO BACKGROUND OCRE) */
+/* Cores Padrão (Desligado: Fundo Branco, Destaque Vermelho) */
 :root {
-    --bg-color-default: #CC7722; /* NOVO: COR OCRE (#CC7722) */ 
+    --bg-color-default: #ffffff; /* NOVO: Fundo Branco (Desligado) */
     --text-color-default: #000000;
     --highlight-bg-default: #e74c3c; 
     --highlight-text-default: #ffffff;
     --toggle-off-color: #95a5a6; 
     --toggle-on-color: #e74c3c; 
+    --light-gray-text: #cccccc; /* Cor cinza claro para o botão (PT)/(EN) */
 }
 
-/* CORES MODO ALTERNATIVO (Ligado: Dourado, Amarelo, Roxo) */
+/* CORES MODO ALTERNATIVO (Ligado: Fundo OCRE) */
 .alt-theme {
-    --bg-color-default: #FFD700; /* Background: Dourado */
+    --bg-color-default: #CC7722; /* NOVO: Background Ocre (Ligado) */
     --text-color-default: #6A0DAD; /* Texto Principal: Roxo */
     --highlight-bg-default: #FFC300; /* Destaque BG: Amarela */
     --highlight-text-default: #6A0DAD; /* Destaque Texto: Roxa */
     --toggle-off-color: #c9610b; /* Toggle OFF */
     --toggle-on-color: #6A0DAD; /* Toggle ON */
+    --light-gray-text: #999999; 
 }
 
 /* ---------------------------------------------------------------------- */
@@ -35,7 +37,7 @@ body {
     padding-top: 2cm;
     padding-bottom: 4cm;
     
-    /* ITEM 5: CORREÇÃO DO FOCO/RESOLUÇÃO DA FONTE */
+    /* CORREÇÃO DO FOCO/RESOLUÇÃO DA FONTE */
     -webkit-font-smoothing: antialiased; 
     -moz-osx-font-smoothing: grayscale; 
     text-rendering: optimizeLegibility; 
@@ -73,13 +75,13 @@ body {
 .detail { font-size: 15pt; }
 
 /* ---------------------------------------------------------------------- */
-/* ------------------------------- ESTILO DO TOGGLE (ITEM 2 & 3) ----------------- */
+/* -------------------------- ESTILO DO TOGGLE DE CORES ---------------------- */
 /* ---------------------------------------------------------------------- */
 
 .fixed-controls {
     position: fixed;
     bottom: 4cm;
-    left: 1cm; /* NOVO: POSICIONADO À ESQUERDA DA MARGEM DE 4CM */
+    left: 2cm; /* NOVO: Posicionado à esquerda da margem de 4cm */
     z-index: 1000;
     display: flex;
     flex-direction: column;
@@ -120,7 +122,7 @@ body {
     box-sizing: border-box;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
     
-    /* NOVO: MOLDURA DE 1 PONTO */
+    /* MOLDURA DE 1 PONTO */
     border: 1px solid var(--text-color-default);
 }
 
@@ -133,10 +135,6 @@ body {
     text-align: center;
     width: 40px;
     user-select: none; 
-}
-
-.lang-slider .toggle-indicator {
-    color: #ffffff;
 }
 
 .toggle-indicator.off {
@@ -178,11 +176,32 @@ body {
     opacity: 1;
 }
 
-/* Cores específicas para o slider de Idioma (PT/EN) */
-.lang-slider {
-    background-color: #007bff; /* Azul padrão para PT */
+/* ---------------------------------------------------------------------- */
+/* ------------------------ ESTILO DO BOTÃO DE TRADUÇÃO (NOVO) ------------------ */
+/* ---------------------------------------------------------------------- */
+
+.lang-switch-btn {
+    position: fixed;
+    bottom: 4cm;
+    right: 3cm; /* Alinhado com a margem direita de 3cm */
+    cursor: pointer;
+    
+    /* REQUISITOS DE ESTILO */
+    font-family: 'Arial Black', Arial, sans-serif;
+    font-size: 9pt;
+    color: var(--light-gray-text); /* Cor cinza claro */
+    text-transform: uppercase;
+    font-weight: 900;
+    padding: 5px 8px;
+    z-index: 1000;
+    
+    /* SIMULA MOLDURA DE 1 PONTO */
+    border: 1px solid var(--light-gray-text); 
+    border-radius: 4px;
+    transition: color 0.3s, border-color 0.3s;
 }
 
-.toggle-input:checked + .lang-slider {
-    background-color: #28a745; /* Verde para EN */
+.lang-switch-btn:hover {
+    color: var(--highlight-bg-default);
+    border-color: var(--highlight-bg-default);
 }
