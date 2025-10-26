@@ -6,13 +6,13 @@
 :root {
     --bg-color-default: #ffffff; 
     --text-color-default: #000000;
-    --highlight-bg-default: #e74c3c; /* Vermelho vivo do destaque */
+    --highlight-bg-default: #e74c3c; 
     --highlight-text-default: #ffffff;
-    --toggle-off-color: #95a5a6; /* Cor do toggle desligado */
-    --toggle-on-color-color: #e74c3c; /* Cor do toggle Ligado (Vermelho) */
+    --toggle-off-color: #95a5a6; 
+    --toggle-on-color: #e74c3c; 
 }
 
-/* CORES MODO ALTERNATIVO (Ligado: ITEM 4) */
+/* CORES MODO ALTERNATIVO (Ligado: ITEM 4 - Dourado, Amarelo, Roxo) */
 .alt-theme {
     --bg-color-default: #FFD700; /* Background: Dourado */
     --text-color-default: #6A0DAD; /* Texto Principal: Roxo */
@@ -62,7 +62,7 @@ body {
     border-radius: 4px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s, color 0.3s;
-    text-align: justify;
+    text-align: justify; 
     
     background-color: var(--highlight-bg-default);
     color: var(--highlight-text-default);
@@ -123,17 +123,13 @@ body {
 
 .toggle-indicator {
     position: absolute;
-    color: white; /* Cor do texto dentro do switch */
+    color: white; 
     font-size: 12pt;
     font-weight: bold;
     line-height: 30px;
     text-align: center;
     width: 40px;
-    user-select: none; /* Impede seleção do texto */
-}
-
-.lang-slider .toggle-indicator {
-    color: #ffffff;
+    user-select: none; 
 }
 
 .toggle-indicator.off {
@@ -177,9 +173,9 @@ body {
 
 /* Cores específicas para o slider de Idioma (PT/EN) */
 .lang-slider {
-    background-color: #007bff; /* Azul padrão para PT (Item 3) */
+    background-color: #007bff; /* Azul padrão para PT */
 }
 
 .toggle-input:checked + .lang-slider {
-    background-color: #28a745; /* Verde para EN (Item 3) */
+    background-color: #28a745; /* Verde para EN */
 }
