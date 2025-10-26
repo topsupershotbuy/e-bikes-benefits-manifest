@@ -20,18 +20,14 @@
 
 /* CORES MODO ALTERNATIVO (Ligado: MARRS GREEN) */
 .alt-theme {
-    --bg-color-default: #008272; /* NOVO: Background Marrs Green */
-    --text-color-default: #0014A8; /* NOVO: Texto Principal Zaffre */
-    --highlight-bg-default: #FFBF00; /* NOVO: Destaque Amber */
-    --highlight-text-default: #0014A8; /* Texto DENTRO do Destaque (Zaffre) */
-    --toggle-off-color: #c9610b; 
-    --toggle-on-color: #6A0DAD; 
-    --lang-text-color: #999999; 
-    --abstract-text-color: #f7f7f7; 
+    --bg-color-default: #008272; /* Marrs Green */
+    --text-color-default: #0014A8; /* Zaffre */
+    --highlight-bg-default: #FFBF00; /* Âmbar */
+    --highlight-text-default: #0014A8; /* Zaffre */
 
-    /* NOVO: Cores de Títulos */
-    --main-topic-color: #FF00FF; /* Fuchsia */
-    --sub-topic-color: #4166F5; /* Ultramarine Blue */
+    /* Cores de Títulos */
+    --main-topic-color: #FF00FF; /* Fúcsia */
+    --sub-topic-color: #4166F5; /* Azul Ultramarino */
 
     /* CORES DA ASSINATURA ALTERNATIVA */
     --signature-bg-color: #333333;
@@ -114,14 +110,69 @@ body {
 /* CORES ESPECÍFICAS PARA TÍTULOS E SUBTÍTULOS NO MODO ALTERNATIVO */
 .alt-theme .main-topic {
     color: var(--highlight-text-default); /* Zaffre */
-    background-color: var(--main-topic-color); /* Fuchsia */
+    background-color: var(--main-topic-color); /* Fúcsia */
 }
 
 .alt-theme .sub-topic {
     color: var(--highlight-text-default); /* Zaffre */
-    background-color: var(--sub-topic-color); /* Ultramarine Blue */
+    background-color: var(--sub-topic-color); /* Azul Ultramarino */
 }
 
+
+/* ---------------------------------------------------------------------- */
+/* ------------------- ESTILO DO BLOCO DE ASSINATURAS (NOVO) ------------------ */
+/* ---------------------------------------------------------------------- */
+.signature-block {
+    position: fixed;
+    top: 2cm; /* ANCORADO NO TOPO */
+    left: 1cm; /* POSICIONADO À ESQUERDA DA MARGEM DO TEXTO (4cm) */
+    width: 140px; 
+    padding: 10px;
+    text-align: left;
+    background-color: var(--signature-bg-color);
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+    transition: all 0.3s;
+    border: 1px solid var(--highlight-bg-default);
+}
+
+#signature-count-title {
+    font-size: 10pt;
+    margin: 0;
+    padding: 0;
+    color: var(--text-color-default);
+    font-family: 'Arial', sans-serif;
+}
+
+.signature-count {
+    display: block;
+    font-size: 20pt;
+    font-family: monospace, Arial, sans-serif; /* Simula fonte cartesiana tabulada */
+    font-weight: 900;
+    color: var(--signature-count-color); /* Azul tabulado */
+    line-height: 1.1;
+    margin-bottom: 10px;
+    padding: 5px 0;
+    border: 1px dashed var(--signature-count-color);
+    text-align: center;
+    background-color: white;
+}
+
+.sign-manifesto-btn {
+    padding: 8px 10px;
+    background-color: var(--highlight-bg-default);
+    color: var(--highlight-text-default);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 10pt;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: bold;
+    width: 100%;
+    margin-top: 5px;
+    transition: background-color 0.3s;
+}
 
 /* ---------------------------------------------------------------------- */
 /* -------------------------- ESTILO DO TOGGLE DE CORES ---------------------- */
@@ -163,61 +214,6 @@ body {
 }
 
 /* ---------------------------------------------------------------------- */
-/* ------------------- ESTILO DO BLOCO DE ASSINATURAS (NOVO) ------------------ */
-/* ---------------------------------------------------------------------- */
-.signature-block {
-    position: fixed;
-    top: 2cm; /* ANCORADO NO TOPO */
-    left: 1cm; /* POSICIONADO À ESQUERDA DA MARGEM DO TEXTO (4cm) */
-    width: 140px; 
-    padding: 10px;
-    text-align: left;
-    background-color: var(--signature-bg-color);
-    border-radius: 5px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    z-index: 999;
-    transition: all 0.3s;
-    border: 1px solid var(--highlight-bg-default);
-}
-
-#signature-count-title {
-    font-size: 10pt;
-    margin: 0;
-    padding: 0;
-    color: var(--text-color-default);
-    font-family: 'Arial', sans-serif;
-}
-
-.signature-count {
-    display: block;
-    font-size: 20pt;
-    font-family: 'Arial', sans-serif; /* FONTE MARTIAL CARTESIANA - Usando Arial/Monospace com estilo */
-    font-weight: 900;
-    color: var(--signature-count-color); /* Azul tabulado */
-    line-height: 1.1;
-    margin-bottom: 10px;
-    padding: 5px 0;
-    border: 1px dashed var(--signature-count-color);
-    text-align: center;
-    background-color: white;
-}
-
-.sign-manifesto-btn {
-    padding: 8px 10px;
-    background-color: var(--highlight-bg-default);
-    color: var(--highlight-text-default);
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 10pt;
-    font-family: 'Quicksand', sans-serif;
-    font-weight: bold;
-    width: 100%;
-    margin-top: 5px;
-    transition: background-color 0.3s;
-}
-
-/* ---------------------------------------------------------------------- */
 /* ------------------ ESTILO DO BOTÃO DE TRADUÇÃO/FONTES ------------------ */
 /* ---------------------------------------------------------------------- */
 
@@ -231,7 +227,7 @@ body {
     
     font-family: Arial, sans-serif;
     font-size: 7pt;
-    color: #4e4d4d; /* Cor solicitada */
+    color: #4e4d4d; 
     text-transform: uppercase;
     font-weight: bold; 
     padding: 5px 8px;
@@ -249,7 +245,7 @@ body {
 .sources-btn {
     position: fixed;
     bottom: 4cm;
-    right: 1cm; /* Posição fixa no canto direito inferior */
+    right: 1cm; 
     cursor: pointer;
     
     font-family: Arial, sans-serif;
