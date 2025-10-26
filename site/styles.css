@@ -4,13 +4,15 @@
 
 /* Cores Padrão (Desligado: Fundo Branco) */
 :root {
-    --bg-color-default: #ffffff; /* Fundo Branco (Desligado) */
+    --bg-color-default: #ffffff; 
     --text-color-default: #000000;
     --highlight-bg-default: #e74c3c; 
     --highlight-text-default: #ffffff;
     --toggle-off-color: #95a5a6; 
     --toggle-on-color: #e74c3c; 
-    --lang-text-color: #4e4d4d; /* Cor Cinza #4e4d4d para o botão (PT)/(EN) */
+    --lang-text-color: #4e4d4d; 
+    --abstract-text-color: #555555; /* Cor para o abstract no modo padrão */
+    --signature-color: #2c3e50; /* Cor para o contador de assinaturas */
 }
 
 /* CORES MODO ALTERNATIVO (Ligado: Fundo OCRE) */
@@ -21,7 +23,9 @@
     --highlight-text-default: #6A0DAD; /* Destaque Texto: Roxa */
     --toggle-off-color: #c9610b; /* Toggle OFF */
     --toggle-on-color: #6A0DAD; /* Toggle ON */
-    --lang-text-color: #999999; /* Cinza claro no modo alternativo */
+    --lang-text-color: #999999; 
+    --abstract-text-color: #f7f7f7; /* Cor clara para o abstract no modo escuro */
+    --signature-color: #ffffff; 
 }
 
 /* ---------------------------------------------------------------------- */
@@ -29,9 +33,8 @@
 /* ---------------------------------------------------------------------- */
 
 body {
-    /* FONTE COM ESPAÇAMENTO CORRIGIDO */
     font-family: 'League Gothic', Arial, sans-serif;
-    letter-spacing: 0.05em; /* Aprox. 0.3pt de distância para League Gothic */
+    letter-spacing: 0.05em; 
     
     background-color: var(--bg-color-default);
     color: var(--text-color-default);
@@ -59,7 +62,25 @@ body {
     margin-bottom: 0;
 }
 
-/* Estilo de Destaque */
+/* TÍTULO PRINCIPAL E ABSTRACT (ITEM 1) */
+#main-title {
+    font-size: 28pt;
+    letter-spacing: 0.1em;
+    padding-bottom: 5px;
+    border-bottom: 4px solid var(--highlight-bg-default); /* Destaque no título */
+    margin-bottom: 20px;
+    color: var(--text-color-default); /* Cor do texto principal */
+}
+
+.abstract-text {
+    font-size: 17pt;
+    line-height: 1.2;
+    margin-bottom: 40px;
+    color: var(--abstract-text-color);
+    text-align: justify;
+}
+
+/* Estilo de Destaque para Conteúdo */
 .main-topic, .sub-topic, .detail {
     display: block; 
     padding: 8px 12px;
@@ -84,7 +105,7 @@ body {
 .fixed-controls {
     position: fixed;
     bottom: 4cm;
-    left: 1cm; /* POSICIONADO À ESQUERDA DA MARGEM DE 4CM */
+    left: 1cm; 
     z-index: 1000;
     display: flex;
     flex-direction: column;
@@ -114,47 +135,25 @@ body {
 /* Redução de 30% no Tamanho */
 .toggle-slider {
     cursor: pointer;
-    width: 70px; /* 100px - 30% */
-    height: 21px; /* 30px - 30% */
+    width: 70px; 
+    height: 21px; 
     background-color: var(--toggle-off-color);
-    border-radius: 10.5px; /* Metade da nova altura */
+    border-radius: 10.5px; 
     position: relative;
     transition: background-color 0.3s;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 3px; /* Ajuste o padding */
+    padding: 0 3px; 
     box-sizing: border-box;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
-    
     border: 1px solid var(--text-color-default);
-}
-
-.toggle-indicator {
-    position: absolute;
-    color: white; 
-    font-size: 8pt; /* Reduzido para caber */
-    font-weight: bold;
-    line-height: 21px;
-    text-align: center;
-    width: 30px; 
-    user-select: none; 
-}
-
-.toggle-indicator.off {
-    left: 3px;
-    opacity: 1;
-}
-
-.toggle-indicator.on {
-    right: 3px;
-    opacity: 0;
 }
 
 .toggle-slider::before {
     content: '';
     position: absolute;
-    width: 18px; /* 25px - 30% */
+    width: 18px; 
     height: 18px;
     background-color: white;
     border-radius: 50%;
@@ -163,43 +162,27 @@ body {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
-/* ESTADO LIGADO (CHECKED) */
-.toggle-input:checked + .toggle-slider {
-    background-color: var(--toggle-on-color);
-}
-
 .toggle-input:checked + .toggle-slider::before {
-    transform: translateX(47px); /* Nova translação: 70px (largura) - 18px (círculo) - 5px (ajuste) */
-}
-
-.toggle-input:checked + .toggle-slider .toggle-indicator.off {
-    opacity: 0;
-}
-
-.toggle-input:checked + .toggle-slider .toggle-indicator.on {
-    opacity: 1;
+    transform: translateX(47px); 
 }
 
 /* ---------------------------------------------------------------------- */
-/* ------------------------ ESTILO DO BOTÃO DE TRADUÇÃO (NOVO) ------------------ */
+/* -------------------- ESTILO DO BOTÃO DE TRADUÇÃO (ITEM 3) -------------------- */
 /* ---------------------------------------------------------------------- */
 
 .lang-switch-btn {
-    /* Inicialmente escondido e posicionado fora da tela para o UX do scroll */
     visibility: hidden; 
     opacity: 0;
-    
     position: fixed;
     bottom: 4cm;
-    right: 3cm; /* Alinhado com a margem direita de 3cm */
+    right: 3cm; 
     cursor: pointer;
     
-    /* REQUISITOS DE ESTILO */
     font-family: Arial, sans-serif;
     font-size: 7pt;
     color: var(--lang-text-color); 
     text-transform: uppercase;
-    font-weight: bold; /* Arial Black em 7pt fica ruim, usamos bold */
+    font-weight: bold; 
     padding: 5px 8px;
     z-index: 1000;
     border: 1px solid var(--lang-text-color); 
@@ -207,8 +190,82 @@ body {
     transition: opacity 0.3s, visibility 0.3s;
 }
 
-/* Classe para mostrar o botão quando o usuário rolar até o final */
 .lang-switch-btn.visible {
     visibility: visible;
     opacity: 1;
+}
+
+/* ---------------------------------------------------------------------- */
+/* ------------------ ESTILO DA SEÇÃO DE ASSINATURAS (ITEM 8) ------------------- */
+/* ---------------------------------------------------------------------- */
+
+.signature-section {
+    margin-top: 60px;
+    padding: 20px;
+    text-align: center;
+    border-top: 2px dashed var(--highlight-bg-default);
+    border-bottom: 2px dashed var(--highlight-bg-default);
+    color: var(--signature-color);
+    transition: color 0.3s, border-color 0.3s;
+}
+
+#signature-count-title {
+    font-size: 18pt;
+    margin-bottom: 5px;
+    color: var(--signature-color);
+}
+
+.signature-count {
+    display: block;
+    font-size: 48pt;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 900;
+    color: var(--highlight-bg-default); /* Cor de destaque para o número */
+    line-height: 1;
+    margin-bottom: 10px;
+}
+
+.sign-manifesto-btn {
+    padding: 10px 25px;
+    background-color: var(--highlight-bg-default);
+    color: var(--highlight-text-default);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16pt;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: bold;
+    margin-top: 15px;
+    transition: background-color 0.3s;
+}
+
+.signature-disclaimer {
+    font-family: Arial, sans-serif;
+    font-size: 10pt;
+    margin-top: 10px;
+}
+
+/* ---------------------------------------------------------------------- */
+/* ------------------------ ESTILO DO BOTÃO DE FONTES (ITEM 6) -------------------- */
+/* ---------------------------------------------------------------------- */
+.sources-btn {
+    position: fixed;
+    bottom: 4cm;
+    right: 1cm; /* Posição fixa no canto direito inferior */
+    cursor: pointer;
+    
+    font-family: Arial, sans-serif;
+    font-size: 7pt;
+    color: #cccccc; /* Cinza claro */
+    text-transform: uppercase;
+    padding: 5px 8px;
+    z-index: 1000;
+    border: 1px solid #cccccc; 
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.sources-btn:hover {
+    color: var(--highlight-bg-default);
+    border-color: var(--highlight-bg-default);
 }
