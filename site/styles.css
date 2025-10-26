@@ -1,0 +1,107 @@
+/* Definição das Cores Padrão (Sem o botão ligado - Referência: Canva vermelho e branco) */
+:root {
+    --bg-color-default: #ffffff; 
+    --text-color-default: #000000; /* Texto principal em preto (cor do corpo) */
+    --highlight-bg-default: #e74c3c; /* Vermelho vivo do destaque */
+    --highlight-text-default: #ffffff; /* Cor do texto DENTRO do destaque */
+
+    /* Cores do Modo Alternativo (Com o botão ligado - Ecopunk) */
+    --bg-color-alt: #fcfd5a; /* Fundo: #fcfd5a */
+    --text-color-alt: #d57bff; /* Texto principal: #d57bff */
+    --highlight-bg-alt: #c9610b; /* Fundo de Destaque: #c9610b */
+    --highlight-text-alt: #d57bff; /* Texto Destaque: #d57bff */
+}
+
+/* Base Body e Margens */
+body {
+    /* FONTE */
+    font-family: 'League Gothic', Arial, sans-serif;
+    
+    background-color: var(--bg-color-default);
+    color: var(--text-color-default);
+    transition: background-color 0.3s, color 0.3s;
+    margin: 0;
+    
+    /* MARGENS: top: 2cm; inferior: 4cm */
+    padding-top: 2cm;
+    padding-bottom: 4cm;
+}
+
+/* Alternância de Tema */
+.alt-theme {
+    background-color: var(--bg-color-alt);
+    color: var(--text-color-alt);
+}
+
+.content-container {
+    /* MARGENS LATERAIS: direita: 3cm; esquerda: 4cm */
+    max-width: calc(100% - 7cm); 
+    margin-left: 4cm;
+    margin-right: 3cm;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+/* Estilo de Destaque */
+.main-topic, .sub-topic, .detail {
+    /* Estilo do bloco, como na referência */
+    display: block; 
+    padding: 8px 12px;
+    margin-bottom: 12px;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, color 0.3s;
+    text-align: justify; /* REQUISITO: Justificado */
+}
+
+/* Títulos Principais (Cor Padrão) */
+.main-topic {
+    background-color: var(--highlight-bg-default);
+    color: var(--highlight-text-default);
+    font-size: 18pt; /* REQUISITO: 18pt */
+}
+
+/* Subtítulos (Cor Padrão) */
+.sub-topic {
+    background-color: var(--highlight-bg-default);
+    color: var(--highlight-text-default);
+    font-size: 16.5pt; /* REQUISITO: 16.5pt */
+}
+
+/* Linhas de Detalhe (Cor Padrão) */
+.detail {
+    background-color: var(--highlight-bg-default);
+    color: var(--highlight-text-default);
+    font-size: 15pt; /* REQUISITO: 15pt */
+}
+
+/* CORES DO MODO ALTERNATIVO */
+.alt-theme .main-topic,
+.alt-theme .sub-topic,
+.alt-theme .detail {
+    background-color: var(--highlight-bg-alt);
+    color: var(--highlight-text-alt);
+}
+
+
+/* Estilo do Botão */
+.color-toggle-btn {
+    position: fixed; 
+    bottom: 4cm; /* Posicionamento: 4cm da margem inferior */
+    left: 4cm; /* Posicionamento: 4cm da margem esquerda */
+    padding: 10px 15px;
+    background-color: var(--highlight-bg-default); 
+    color: var(--highlight-text-default);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.alt-theme .color-toggle-btn {
+    background-color: var(--highlight-bg-alt);
+    color: var(--highlight-text-alt);
+}
