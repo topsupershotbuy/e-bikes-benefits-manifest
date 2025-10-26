@@ -3,7 +3,7 @@ const CONTENT_DATA = {
     // TÍTULOS ESTÁTICOS E LABELS
     'title': { 'PT': "BENEFÍCIOS DO CICLISMO URBANO", 'EN': "URBAN CYCLING BENEFITS" },
     'label-color': { 'PT': "Modo de Cores:", 'EN': "Color Mode:" },
-    'label-lang': { 'PT': "Tradução:", 'EN': "Translation:" },
+    // ... (Os labels de tradução não são mais necessários aqui, pois o botão é dinâmico)
 
     // ------------------------------------------------
     // SEÇÕES DE CONTEÚDO (CONTEÚDO COMPLETO AQUI)
@@ -408,6 +408,8 @@ const BODY_ELEMENT = document.getElementById('site-body');
 const COLOR_TOGGLE = document.getElementById('color-toggle');
 const LANG_SWITCH_BTN = document.getElementById('lang-switch-btn'); 
 const CONTENT_CONTAINER = document.getElementById('content-container');
+const LAST_CONTENT_MARKER = document.getElementById('last-content-marker');
+
 
 // FUNÇÕES DE ESTADO
 function saveState(key, value) { localStorage.setItem(key, value); }
@@ -433,17 +435,17 @@ function toggleColorMode() {
 
 // FUNÇÃO DE TRADUÇÃO E PREENCHIMENTO DE CONTEÚDO
 function updateContent() {
-    const lang = getLang();
-    // O botão mostra o idioma PARA O QUAL vai traduzir
-    const targetLang = (lang === 'PT' ? 'EN' : 'PT'); 
+    const currentLang = getLang();
+    // O botão mostra o idioma PARA O QUAL ele VAI TRADUZIR
+    const targetLang = (currentLang === 'PT' ? 'EN' : 'PT'); 
     
     // 1. Preenche o Título principal
-    document.getElementById('main-title').textContent = CONTENT_DATA['title'][lang];
+    document.getElementById('main-title').textContent = CONTENT_DATA['title'][currentLang];
     
     // 2. Preenche o label do toggle de cores
-    document.querySelector('.toggle-label[for="color-toggle"]').textContent = CONTENT_DATA['label-color'][lang];
+    document.querySelector('.toggle-label[for="color-toggle"]').textContent = CONTENT_DATA['label-color'][currentLang];
     
-    // 3. Atualiza o texto do botão de tradução (PT <-> EN)
+    // 3. Atualiza o texto do botão de tradução
     LANG_SWITCH_BTN.textContent = `(${targetLang})`;
     
     // 4. CONSTRUÇÃO DO CORPO DO MANIFESTO (ESTRUTURA COMPLETA)
@@ -453,19 +455,20 @@ function updateContent() {
     for (let i = 1; i <= 10; i++) {
         const majorKey = `${i}.0`;
         if (CONTENT_DATA[majorKey]) {
-            htmlContent += `<h2 class="main-topic">${CONTENT_DATA[majorKey][lang]}</h2>`;
+            htmlContent += `<h2 class="main-topic">${CONTENT_DATA[majorKey][currentLang]}</h2>`;
             
             // Loop de Subseções (Ex: 1.1, 1.2)
             let j = 1;
             while (CONTENT_DATA[`${i}.${j}`]) {
                 const subKey = `${i}.${j}`;
-                htmlContent += `<h3 class="sub-topic">${CONTENT_DATA[subKey][lang]}</h3>`;
+                htmlContent += `<h3 class="sub-topic">${CONTENT_DATA[subKey][currentLang]}</h3>`;
                 
                 // Loop de Detalhes (Ex: 1.1.1, 1.1.2)
                 let k = 1;
                 while (CONTENT_DATA[`${subKey}.${k}`]) {
                     const detailKey = `${subKey}.${k}`;
-                    const detailText = CONTENT_DATA[detailKey][lang] || '';
+                    // Acessa o texto de detalhe
+                    const detailText = CONTENT_DATA[detailKey][currentLang] || '';
                     htmlContent += `<p class="detail">${detailText}</p>`;
                     k++;
                 }
@@ -481,10 +484,24 @@ function updateContent() {
 
 function toggleLanguage() {
     const currentLang = getLang();
+    // O novo idioma é o oposto do atual
     const newLang = (currentLang === 'PT' ? 'EN' : 'PT');
     
     saveState('lang-mode', newLang);
     updateContent(); // Recarrega o conteúdo no novo idioma
+}
+
+// ITEM 3: FUNÇÃO PARA MOSTRAR O BOTÃO DE TRADUÇÃO APENAS NO FINAL
+function checkScroll() {
+    const markerPosition = LAST_CONTENT_MARKER.getBoundingClientRect().top;
+    const viewportHeight = window.innerHeight;
+
+    // Se a marcação do final do conteúdo estiver visível ou acima da metade da tela
+    if (markerPosition <= viewportHeight * 0.95) { 
+        LANG_SWITCH_BTN.classList.add('visible');
+    } else {
+        LANG_SWITCH_BTN.classList.remove('visible');
+    }
 }
 
 
@@ -500,8 +517,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 2. ATUALIZA O CONTEÚDO INICIAL (Isso também define o idioma e o botão de tradução)
     updateContent();
     
-    // 3. Adiciona o listener para o novo botão de texto
-    if (LANG_SWITCH_BTN) {
-        LANG_SWITCH_BTN.addEventListener('click', toggleLanguage);
-    }
+    // 3. ADICIONA LISTENER DE SCROLL para o botão de tradução (Item 3)
+    window.addEventListener('scroll', checkScroll);
+    checkScroll(); // Verifica na carga inicial
 });
