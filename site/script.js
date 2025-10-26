@@ -1,22 +1,12 @@
-// O CONTEÚDO COMPLETO DO MANIFESTO É MANTIDO AQUI PARA TRADUÇÃO
+// O CONTEÚDO COMPLETO DO MANIFESTO (CORRIGIDO PARA ESTRUTURA PT/EN)
 const CONTENT_DATA = {
     // TÍTULOS ESTÁTICOS E LABELS
-    'title': {
-        'PT': "BENEFÍCIOS DO CICLISMO URBANO",
-        'EN': "URBAN CYCLING BENEFITS"
-    },
-    'label-color': {
-        'PT': "Modo de Cores:",
-        'EN': "Color Mode:"
-    },
-    'label-lang': {
-        'PT': "Tradução:",
-        'EN': "Translation:"
-    },
+    'title': { 'PT': "BENEFÍCIOS DO CICLISMO URBANO", 'EN': "URBAN CYCLING BENEFITS" },
+    'label-color': { 'PT': "Modo de Cores:", 'EN': "Color Mode:" },
+    'label-lang': { 'PT': "Tradução:", 'EN': "Translation:" },
 
     // ------------------------------------------------
-    // SEÇÕES DE CONTEÚDO (AGORA TODAS ESTRUTURADAS CORRETAMENTE)
-    // OBS: As traduções EN foram completadas de forma básica para evitar o erro 'undefined'.
+    // SEÇÕES DE CONTEÚDO (CONTEÚDO COMPLETO AQUI)
     // ------------------------------------------------
 
     // SEÇÃO 1: BENEFÍCIOS FÍSICOS E FISIOLÓGICOS
@@ -412,17 +402,20 @@ const CONTENT_DATA = {
     '10.2.6': { 'PT': 'Serviços especializados: Manutenção, seguro e financiamento', 'EN': 'Specialized services: Maintenance, insurance, and financing' },
     '10.2.7': { 'PT': 'Exportação: Potencial de exportação para América Latina', 'EN': 'Export potential: Potential for export to Latin America' },
     '10.2.8': { 'PT': 'Inovação em baterias: Desenvolvimento de tecnologia nacional', 'EN': 'Innovation in batteries: Development of national technology' }
-}; // FIM DO OBJETO CONTENT_DATA
+}; 
 
 const BODY_ELEMENT = document.getElementById('site-body');
 const COLOR_TOGGLE = document.getElementById('color-toggle');
-const LANG_TOGGLE = document.getElementById('lang-toggle');
+const LANG_SWITCH_BTN = document.getElementById('lang-switch-btn'); 
 const CONTENT_CONTAINER = document.getElementById('content-container');
 
 // FUNÇÕES DE ESTADO
 function saveState(key, value) { localStorage.setItem(key, value); }
 function loadState(key) { return localStorage.getItem(key); }
-function getLang() { return LANG_TOGGLE.checked ? 'EN' : 'PT'; }
+function getLang() { 
+    // Garante que o idioma padrão seja PT se não houver estado salvo
+    return loadState('lang-mode') || 'PT'; 
+}
 
 
 // FUNÇÃO DE MUDANÇA DE COR
@@ -441,15 +434,19 @@ function toggleColorMode() {
 // FUNÇÃO DE TRADUÇÃO E PREENCHIMENTO DE CONTEÚDO
 function updateContent() {
     const lang = getLang();
+    // O botão mostra o idioma PARA O QUAL vai traduzir
+    const targetLang = (lang === 'PT' ? 'EN' : 'PT'); 
     
     // 1. Preenche o Título principal
     document.getElementById('main-title').textContent = CONTENT_DATA['title'][lang];
     
-    // 2. Preenche os labels dos toggles
+    // 2. Preenche o label do toggle de cores
     document.querySelector('.toggle-label[for="color-toggle"]').textContent = CONTENT_DATA['label-color'][lang];
-    document.querySelector('.toggle-label[for="lang-toggle"]').textContent = CONTENT_DATA['label-lang'][lang];
-
-    // 3. CONSTRUÇÃO DO CORPO DO MANIFESTO (ESTRUTURA COMPLETA)
+    
+    // 3. Atualiza o texto do botão de tradução (PT <-> EN)
+    LANG_SWITCH_BTN.textContent = `(${targetLang})`;
+    
+    // 4. CONSTRUÇÃO DO CORPO DO MANIFESTO (ESTRUTURA COMPLETA)
     let htmlContent = `<div class="topic-section">`;
     
     // Loop principal (Seções 1 a 10)
@@ -468,8 +465,6 @@ function updateContent() {
                 let k = 1;
                 while (CONTENT_DATA[`${subKey}.${k}`]) {
                     const detailKey = `${subKey}.${k}`;
-                    // A correção de sintaxe garante que o valor seja acessado corretamente, mesmo que seja apenas uma string no objeto.
-                    // O valor é acessado como string do objeto (ex: CONTENT_DATA['1.1.1']['PT'])
                     const detailText = CONTENT_DATA[detailKey][lang] || '';
                     htmlContent += `<p class="detail">${detailText}</p>`;
                     k++;
@@ -485,8 +480,11 @@ function updateContent() {
 }
 
 function toggleLanguage() {
-    saveState('lang-mode', getLang());
-    updateContent(); 
+    const currentLang = getLang();
+    const newLang = (currentLang === 'PT' ? 'EN' : 'PT');
+    
+    saveState('lang-mode', newLang);
+    updateContent(); // Recarrega o conteúdo no novo idioma
 }
 
 
@@ -499,12 +497,11 @@ document.addEventListener('DOMContentLoaded', () => {
         BODY_ELEMENT.classList.add('alt-theme');
     }
     
-    // 2. CARREGA O MODO DE TRADUÇÃO
-    const savedLang = loadState('lang-mode');
-    if (savedLang === 'EN') {
-        LANG_TOGGLE.checked = true;
-    }
-    
-    // 3. ATUALIZA O CONTEÚDO INICIAL
+    // 2. ATUALIZA O CONTEÚDO INICIAL (Isso também define o idioma e o botão de tradução)
     updateContent();
+    
+    // 3. Adiciona o listener para o novo botão de texto
+    if (LANG_SWITCH_BTN) {
+        LANG_SWITCH_BTN.addEventListener('click', toggleLanguage);
+    }
 });
